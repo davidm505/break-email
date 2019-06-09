@@ -9,57 +9,81 @@ year = datetime.today().strftime('%Y')
 #Show Metadata Variables
 shooting_day = str(input('Enter Shooting Day: '))
 episode = str(input('Enter Episode: '))
-am_pm_break = ''
 show_code = 'BP'
 show_name = 'Briarpatch'
 
 #Media Variables
-trt = str(input('Please enter the TRT: '))
-gigabytes = float(input('Please enter the GB: '))
-camera_rolls = str(input('Please Enter Camera Rolls: '))
-sound_rolls = str(input("Please Enter Sound Rolls: "))
-
-def runtime_check():
-    global trt
-    while len(trt) != 11:
-        print("Please double check your TRT")
-        trt = str(input('Please Enter TRT: '))
-    return trt
+gigabytes = float(input('Please Enter The GB: '))
 
 def break_wrap():
+    '''
+    Prompts user for input. 
+
+    Returns:
+        A string with either Break or Wrap.
+    '''
+
     film_break = ''
+
     while film_break != 'Y' and film_break != 'N':
         film_break = input("Is this the break? Enter Y or N: ").upper()
+
     if film_break == 'Y':
         return "Break"
     else:
         return "Wrap"
 
-def subject_line():
-    if break_wrap == True:
-        filmbreak = 'Break'
-    else:
-        filmbreak = 'Wrap'
-    
-    sub_line = f"{show_code}_{date}_{episode}_{shooting_day} - {am_pm_break} Received\n"
-    return sub_line
+def runtime():
+    '''
+    Prompts for user input.
 
-def body():
-    if break_wrap == True:
-        filmbreak = 'Break'
-    else:
-        filmbreak = 'Wrap'
+    Returns:
+        the trt as a string.
+    '''
 
-    return f'{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {camera_rolls.upper()} and Sound Roll {sound_rolls.upper()} have been received at the lab.'
+    trt = str(input("Please enter the TRT: "))
+
+    while len(trt) != 11:
+        print("Please double check your TRT")
+        trt = str(input('Please Enter TRT: '))
+
+    return trt
+
+def camera_rolls():
+    '''
+    Prompts for user input. 
+
+    Returns:
+        Camera roll(s) as a string.
+    '''
+
+    cr = str(input("Please Enter The Camera Roll(s): "))
+
+    return cr.upper()
+
+def sound_rolls():
+    '''
+    Prompts for user input. 
+
+    Returns:
+        Sound rolls as a string.
+    '''
+
+    sr = str(input("Please Enter The Sound Roll(s): "))
+
+    return sr.upper()
+
 
 def received_email():
-    global am_pm_break
-    
-    runtime_check()
+
     am_pm_break = break_wrap()
-    print('\n')
-    print(subject_line())
-    print(body())
+    trt = runtime()
+    cr = camera_rolls()
+    sr = sound_rolls()
+
+    print(f"\n{show_code}_{date}_{episode}_{shooting_day} - {am_pm_break} Received\n")
+
+    print(f'{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.')
 
 received_email()
 
