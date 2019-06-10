@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 #Date Variables
 date = datetime.today().strftime('%Y%m%d')
 month = datetime.today().strftime('%B')
@@ -32,6 +33,7 @@ def break_wrap():
         return "Break"
     else:
         return "Wrap"
+
 
 def runtime():
     '''
@@ -81,11 +83,14 @@ def received_email():
     cr = camera_rolls()
     sr = sound_rolls()
 
+    #Print to a text file.
+    f = open('test.txt','w')
+    f.write(f"\n{show_code}_{date}_{episode}_{shooting_day} - {am_pm_break} Received\n\n{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.")
+    f.close()
+
+    #Print to terminal
     print(f"\n{show_code}_{date}_{episode}_{shooting_day} - {am_pm_break} Received\n")
 
     print(f'{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.')
 
 received_email()
-
-
-
