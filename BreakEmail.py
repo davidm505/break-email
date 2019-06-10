@@ -81,6 +81,11 @@ def received_email():
     cr = camera_rolls()
     sr = sound_rolls()
 
+    #Create TXT File
+    f = open("break.txt", 'w')
+    f.write(f"\n{show_code}_{date}_{episode}_{shooting_day} - {am_pm_break} Received\n{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.")
+    f.close()
+
     print(f"\n{show_code}_{date}_{episode}_{shooting_day} - {am_pm_break} Received\n")
 
     print(f'{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.')
