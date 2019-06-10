@@ -57,8 +57,11 @@ def camera_rolls():
         Camera roll(s) as a string.
     '''
 
-    cr = str(input("Please Enter The Camera Roll(s): "))
+    cr = ''
 
+    while cr == '':
+        cr = input("Please Enter The Camera Roll(s): ")
+         
     return cr.upper()
 
 def sound_rolls():
@@ -69,7 +72,10 @@ def sound_rolls():
         Sound rolls as a string.
     '''
 
-    sr = str(input("Please Enter The Sound Roll(s): "))
+    sr = ''
+
+    while sr == '':
+        sr = str(input("Please Enter The Sound Roll(s): "))
 
     return sr.upper()
 
