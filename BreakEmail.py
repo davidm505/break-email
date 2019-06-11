@@ -1,9 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 #Date Variables
-date = datetime.today().strftime('%Y%m%d')
+date = datetime.today().strftime('%Y%m')
 month = datetime.today().strftime('%B')
-day = datetime.today().strftime('%-d')
 year = datetime.today().strftime('%Y')
 
 #Show Metadata Variables
@@ -14,6 +13,19 @@ show_name = 'Briarpatch'
 
 #Media Variables
 gigabytes = float(input('Please Enter The GB: '))
+
+def day_check():
+    '''
+        Checks the current hour and adjust the day if it past midnight and before noon.
+    '''
+
+    hour = datetime.today().strftime('%-H')
+    
+    if hour in range(0,13):
+        yesterday = datetime.today() - timedelta(days=1)
+        return yesterday.strftime('%-d')
+    else:
+        return datetime.today().strftime('%-d')
 
 def break_wrap():
     '''
@@ -83,16 +95,17 @@ def sound_rolls():
 def received_email():
 
     am_pm_break = break_wrap()
+    day = day_check()
     trt = runtime()
     cr = camera_rolls()
     sr = sound_rolls()
 
     #Create TXT File
     f = open("break.txt", 'w')
-    f.write(f"\n{show_code}_{date}_{episode}_{shooting_day} - {am_pm_break} Received\n{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.")
+    f.write(f"\n{show_code}_{date+day}_{episode}_{shooting_day} - {am_pm_break} Received\n{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.")
     f.close()
 
-    print(f"\n{show_code}_{date}_{episode}_{shooting_day} - {am_pm_break} Received\n")
+    print(f"\n{show_code}_{date+day}_{episode}_{shooting_day} - {am_pm_break} Received\n")
 
     print(f'{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.')
 
