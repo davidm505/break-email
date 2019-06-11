@@ -1,9 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 #Date Variables
-date = datetime.today().strftime('%Y%m%d')
+date = datetime.today().strftime('%Y%m')
 month = datetime.today().strftime('%B')
-day = datetime.today().strftime('%d')
 year = datetime.today().strftime('%Y')
 
 #Show Metadata Variables
@@ -49,6 +48,19 @@ class Organizer():
         def __str__(self):
 
                 return self.media
+
+def day_check():
+        '''
+        Checks the current hour and adjust the day if it past midnight and before noon
+        '''
+
+        hour = datetime.today().strftime('%-H')
+        
+        if hour in range(0,13):
+                yesterday = datetime.today() - timedelta(days=1)
+                return yesterday.strftime('%-d')
+        else:
+                return datetime.today().strftime('%-d')
 
 def shuttle_organizer():
         '''
@@ -112,9 +124,9 @@ def discrepancy():
         
         return discrep
 
-
 def complete_email():
 
+        day = day_check()
         camera_rolls = camera_roll_organizer()
         sound_rolls = sound_roll_organizer()
         shuttles = shuttle_organizer()
@@ -122,9 +134,9 @@ def complete_email():
 
         print('\n')
         
-        print(f'{show_code}_{date}_{episode}_{shooting_day} - Dailies Complete\n')
+        print(f'{show_code}_{date+day}_{episode}_{shooting_day} - Dailies Complete\n')
 
-        print(f"{show_name}\nShoot Date: {date}\nTransfer Date: {date}\n")
+        print(f"{show_name}\nShoot Date: {date+day}\nTransfer Date: {date+day}\n")
         print(f"All dailies work for {show_name} {episode} Day {shooting_day}, {month} {day}, {year} is now complete.\n")
         print(f'Discrepancy Highlights: {discrepancies}\n')
         print(f'Editorial Files: All Editorial Dailies for {show_name} {episode} Day {shooting_day}, have been transferred over Aspera and can be found on The ISIS.\n')
