@@ -20,6 +20,7 @@ def day_check():
     '''
 
     hour = datetime.today().strftime('%-H')
+    hour = int(hour)
     
     if hour in range(0,13):
         yesterday = datetime.today() - timedelta(days=1)
@@ -102,11 +103,9 @@ def received_email():
 
     #Create TXT File
     f = open("break.txt", 'w')
-    f.write(f"\n{show_code}_{date+day}_{episode}_{shooting_day} - {am_pm_break} Received\n{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.")
+    f.write(f'''\n{show_code}_{date+day}_{episode}_{shooting_day} - {am_pm_break} Received\n{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.''')
     f.close()
 
-    print(f"\n{show_code}_{date+day}_{episode}_{shooting_day} - {am_pm_break} Received\n")
-
-    print(f'{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.')
+    print("a txt file titled, \"break.txt\" has been created in the location of this script.")
 
 received_email()
