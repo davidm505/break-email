@@ -1,4 +1,13 @@
 from datetime import datetime, timedelta
+import re
+import os.path
+
+#FilPath Variables
+cwd = os.getcwd()
+filePath = os.path.dirname(os.path.realpath(__file__))
+
+print("Current Working Directory is: " + cwd)
+print("File path is: " + filePath)
 
 #Date Variables
 date = datetime.today().strftime('%Y%m')
@@ -48,19 +57,21 @@ def break_wrap():
 
 def runtime():
     '''
-    Prompts for user input.
+    Prompts for user input. Checks input against a regular expression.
 
     Returns:
         the trt as a string.
     '''
 
-    trt = str(input("Please enter the TRT: "))
-
-    while len(trt) != 11:
-        print("Please double check your TRT")
-        trt = str(input('Please Enter TRT: '))
-
-    return trt
+    while True:
+        trt = str(input("Please enter the TRT: "))
+        trtRegEX = re.compile(r'\d\d:\d\d:\d\d:\d\d')
+        mo = trtRegEX.search(trt)
+        
+        if mo:
+            return trt
+        else:
+            continue
 
 def camera_rolls():
     '''
@@ -102,10 +113,11 @@ def received_email():
     sr = sound_rolls()
 
     #Create TXT File
-    f = open("break.txt", 'w')
-    f.write(f'''\n{show_code}_{date+day}_{episode}_{shooting_day} - {am_pm_break} Received\n{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.''')
+    fullName = os.path.join(filePath,"break.txt")
+    f = open(fullName, 'w')
+    f.write(f'''\n{show_code}_{date+day}_{episode}_{shooting_day} - {am_pm_break} Received\n\n{show_name} {episode} Day {shooting_day}, {month} {day}, {year} - {am_pm_break} Received.\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.''')
     f.close()
 
-    print("a txt file titled, \"break.txt\" has been created in the location of this script.")
+    print("a txt file titled, \"break.txt\" has been created in the location of this program.")
 
 received_email()

@@ -7,13 +7,11 @@ year = datetime.today().strftime('%Y')
 
 #Show Metadata Variables
 shooting_day = str(input('Enter Shooting Day: '))
-episode = str(input('Enter Episode: '))
+episode = str(input('Enter Episode Block: '))
 show_code = 'BP'
 show_name = 'Briarpatch'
 
 #Media Variables
-trt = str(input('Please enter the TRT: '))
-circle_trt = str(input("Please enter the Circle TRT: "))
 gigabytes = float(input('Please enter the GB: '))
 
 class Organizer():
@@ -51,16 +49,43 @@ class Organizer():
 
 def day_check():
         '''
-        Checks the current hour and adjust the day if it past midnight and before noon
+        Checks the current hour and adjusts the day if it past midnight and before noon
         '''
 
         hour = datetime.today().strftime('%-H')
+
+        hour = int(hour)
         
-        if hour in range(0,13):
+        if hour in range(0,12):
                 yesterday = datetime.today() - timedelta(days=1)
                 return yesterday.strftime('%-d')
         else:
                 return datetime.today().strftime('%-d')
+
+def episode_gatherer():
+        episodes = []
+        
+        while True:
+                episode_num = str(input('Please Enter the Episode Number: '))
+                episode_ctrt = str(input("Please Enter the Circle TRT: "))
+                episode_trt = str(input("Please Enter the Total TRT: "))
+                episodes.append((episode_num, episode_ctrt, episode_trt))
+
+                cont = input("Are there more episode? [y/n]: ")
+                if not cont.lower() in ('y' or 'yes'):
+                        return episodes
+
+def episode_organizer(eps):
+
+        organized_ep = ''
+
+        for ep_block in eps:
+                organized_ep += ('Running Times:\n' 
+                                + ep_block[0] + ' Day ' + shooting_day + '\n' 
+                                + "Total Viewing TRT: " + ep_block[1] + '\n' 
+                                + "Total Editorial TRT: " + ep_block[2] + '\n\n' )
+        
+        return organized_ep
 
 def shuttle_organizer():
         '''
@@ -79,7 +104,7 @@ def shuttle_organizer():
         for drive in new_shuttles:
                 appended_shuttle_list += "Shuttle Drive: " + drive + '\n'
 
-        return appended_shuttle_list
+        return appended_shuttle_list 
 
 def camera_roll_organizer():
         '''
@@ -130,22 +155,28 @@ def complete_email():
         camera_rolls = camera_roll_organizer()
         sound_rolls = sound_roll_organizer()
         shuttles = shuttle_organizer()
+        ep = episode_gatherer()
+        ep_list = episode_organizer(ep)
         discrepancies = discrepancy()
 
-        print('\n')
-        
-        print(f'{show_code}_{date+day}_{episode}_{shooting_day} - Dailies Complete\n')
+        f = open('Complete.txt', 'w')
+        f.write(f'{show_code}_{date+day}_{episode}_{shooting_day} - Dailies Complete\n\n{show_name}\n\nShoot Date: {date+day}\nTransfer Date: {date+day}\n\nAll dailies work for {show_name} {episode} Day {shooting_day}, {month} {day}, {year} is now complete.\n\nDiscrepancy Highlights: {discrepancies}\n\nEditorial Files: All Editorial Dailies for {show_name} {episode} Day {shooting_day}, have been transferred over Aspera and can be found on The ISIS.\n\nPIX: All PIX Screeners for {show_name} {episode}, Day {shooting_day}, have been uploaded to the Dailies unreleased folder.\n\nThe Break & Wrap On Set Rotation Drives are available for pickup from the dailies office at any time.  Building A room 211.\n\nReports:  Please find all attached reports from production and the dailies lab. The following Rotation Drives and Camera Rolls have been received, backed up, and QC’d at the lab.\n\nDrives Received:\n{shuttles}\nCamera Rolls Completed:\n{camera_rolls}\n\nSound Rolls:\n{sound_rolls}\n\n{ep_list}Total GB: {gigabytes}')
+        f.close()
 
-        print(f"{show_name}\nShoot Date: {date+day}\nTransfer Date: {date+day}\n")
-        print(f"All dailies work for {show_name} {episode} Day {shooting_day}, {month} {day}, {year} is now complete.\n")
-        print(f'Discrepancy Highlights: {discrepancies}\n')
-        print(f'Editorial Files: All Editorial Dailies for {show_name} {episode} Day {shooting_day}, have been transferred over Aspera and can be found on The ISIS.\n')
-        print(f"PIX: All PIX Screeners for {show_name} {episode}, Day {shooting_day}, have been uploaded to the Dailies unreleased folder.\n")
-        print('The Break & Wrap On Set Rotation Drives are available for pickup from the dailies office at any time.  Building A room 211.\n')
-        print('Reports:  Please find all attached reports from production and the dailies lab. The following Rotation Drives and Camera Rolls have been received, backed up, and QC’d at the lab.\n')
-        print(f'Drives Received:\n{shuttles}')
-        print(f'Camera Rolls Completed:\n{camera_rolls}\n')
-        print(f'Sound Rolls:\n{sound_rolls}\n')
-        print(f'Running Times:\n{episode} Day {shooting_day}\nTotal Viewing TRT: {circle_trt}\nTotal Editorial TRT: {trt}\n{gigabytes} GBs')
+        print('A text file titled, \"Complte.txt\" has been created in the location of this script.')
+        
+        # print(f'{show_code}_{date+day}_{episode}_{shooting_day} - Dailies Complete\n')
+
+        # print(f"{show_name}\nShoot Date: {date+day}\nTransfer Date: {date+day}\n")
+        # print(f"All dailies work for {show_name} {episode} Day {shooting_day}, {month} {day}, {year} is now complete.\n")
+        # print(f'Discrepancy Highlights: {discrepancies}\n')
+        # print(f'Editorial Files: All Editorial Dailies for {show_name} {episode} Day {shooting_day}, have been transferred over Aspera and can be found on The ISIS.\n')
+        # print(f"PIX: All PIX Screeners for {show_name} {episode}, Day {shooting_day}, have been uploaded to the Dailies unreleased folder.\n")
+        # print('The Break & Wrap On Set Rotation Drives are available for pickup from the dailies office at any time.  Building A room 211.\n')
+        # print('Reports:  Please find all attached reports from production and the dailies lab. The following Rotation Drives and Camera Rolls have been received, backed up, and QC’d at the lab.\n')
+        # print(f'Drives Received:\n{shuttles}')
+        # print(f'Camera Rolls Completed:\n{camera_rolls}\n')
+        # print(f'Sound Rolls:\n{sound_rolls}\n')
+        # print(f'{ep_list}')
 
 complete_email()
