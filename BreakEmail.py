@@ -80,14 +80,16 @@ def camera_rolls():
     Returns:
         Camera roll(s) as a string.
     '''
-
+    camRegEx = re.compile(r'[a-zA-Z]\d\d\d')
     cr = ''
 
     while cr == '':
         cr = input("Please Enter The Camera Roll(s): ")
+        mo = camRegEx.findall(cr)
+        mo.sort()
+        sortedRoll = ', '.join(mo)
+        return sortedRoll.upper()
          
-    return cr.upper()
-
 def sound_rolls():
     '''
     Prompts for user input. 
@@ -96,12 +98,15 @@ def sound_rolls():
         Sound rolls as a string.
     '''
 
+    srRegEx = re.compile(r'[a-zA-Z][a-zA-Z]\d\d\d')
     sr = ''
 
     while sr == '':
         sr = str(input("Please Enter The Sound Roll(s): "))
-
-    return sr.upper()
+        mo = srRegEx.findall(sr)
+        mo.sort()
+        sortedSR = ', '.join(mo)
+        return sortedSR.upper()
 
 
 def received_email():
