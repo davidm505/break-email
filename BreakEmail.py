@@ -103,10 +103,14 @@ def sound_rolls():
 
     while sr == '':
         sr = str(input("Please Enter The Sound Roll(s): "))
-        mo = srRegEx.findall(sr)
-        mo.sort()
-        sortedSR = ', '.join(mo)
-        return sortedSR.upper()
+
+        if (sr == 'n/a' or sr == 'N/A'):
+            return sr
+        else:
+            mo = srRegEx.findall(sr)
+            mo.sort()
+            sortedSR = ', '.join(mo)
+            return sortedSR.upper()
 
 
 def received_email():
