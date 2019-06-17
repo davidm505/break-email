@@ -98,7 +98,7 @@ def sound_rolls():
         Sound rolls as a string.
     '''
 
-    srRegEx = re.compile(r'[a-zA-Z][a-zA-Z]\d\d\d')
+    srRegEx = re.compile(r'[a-zA-Z]+\d\d\d')
     sr = ''
 
     while sr == '':
