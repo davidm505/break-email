@@ -1,0 +1,99 @@
+{
+    "Complete Email":[
+        {
+            "Name":"Daniel Rentas",
+            "Title": "Associate Producer",
+            "Email": "dcrentas@gmail.com;"
+        },
+        {
+            "Name": "Gregg Tilson",
+            "Title": "Co-Producer Post",
+            "Email": "greggbattlestary@yahoo.com;"
+        },
+        {
+            "Name": "Heather Christiansen",
+            "Title": "Post Production Coordinator",
+            "Email": "heatherpostprod@gmail.com;"
+        },
+        {
+            "Name": "Tim Gregoire",
+            "Title": "DIT",
+            "Email": "editpoint@mac.com;"
+        },
+        {
+            "Name": "Katy Jones",
+            "Title": "Digital Loader",
+            "Email": "kcj.film@gmail.com;"
+        },
+        {
+            "Name": "Emily Aldana",
+            "Title": "POC",
+            "Email": "emilyealdana@gmail.com;"
+        },
+        {
+            "Name": "SimGroup",
+            "Title": "Dailies Crew",
+            "Email": "Dr.BriarPatch@siminternational.com;"
+        },
+        {
+            "Name": "Hunter Betts",
+            "Title": "Director of Post",
+            "Email": "hunterbetts@siminternational.com;"
+        }
+    ],
+    "Break Email":[
+        {
+            "Name":"Daniel Rentas",
+            "Title": "Associate Producer",
+            "Email": "dcrentas@gmail.com;"
+        },
+        {
+            "Name": "Gregg Tilson",
+            "Title": "Co-Producer Post",
+            "Email": "greggbattlestary@yahoo.com;"
+        },
+        {
+            "Name": "Heather Christiansen",
+            "Title": "Post Production Coordinator",
+            "Email": "heatherpostprod@gmail.com;"
+        },
+        {
+            "Name": "Tim Gregoire",
+            "Title": "DIT",
+            "Email": "editpoint@mac.com;"
+        },
+        {
+            "Name": "Katy Jones",
+            "Title": "Digital Loader",
+            "Email": "kcj.film@gmail.com;"
+        },
+        {
+            "Name": "Emily Aldana",
+            "Title": "POC",
+            "Email": "emilyealdana@gmail.com;"
+        },
+        {
+            "Name": "SimGroup",
+            "Title": "Dailies Crew",
+            "Email": "Dr.BriarPatch@siminternational.com;"
+        }
+    ],
+    "Stills Email": [
+        {
+            "Name": "SimGroup",
+            "Title": "Dailies Crew",
+            "Email": "Dr.BriarPatch@siminternational.com;"
+        },
+        {
+            "Name": "Zack Galler",
+            "Title": "DP",
+            "Email": "zgaller@gmail.com;"
+        },
+        {
+            "Name": "Tim Gregoire",
+            "Title": "DIT",
+            "Email": "editpoint@mac.com;"
+        }
+        
+    ]
+}
