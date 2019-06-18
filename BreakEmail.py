@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import re
 import os.path
 import json
+import webbrowser
 
 # FilPath Variables
 cwd = os.getcwd()
@@ -27,6 +28,7 @@ show_name = 'Briarpatch'
 # Media Variables
 gigabytes = float(input('Please Enter The GB: '))
 
+
 def email_distro():
 
     email_distro_list = ''
@@ -39,19 +41,21 @@ def email_distro():
     
     return email_distro_list
 
+
 def day_check():
     '''
         Checks the current hour and adjust the day if it past midnight and before noon.
     '''
 
-    hour = datetime.today().strftime('%-H')
+    hour = datetime.today().strftime('%H')
     hour = int(hour)
     
     if hour in range(0,13):
         yesterday = datetime.today() - timedelta(days=1)
-        return yesterday.strftime('%-d')
+        return yesterday.strftime('%d')
     else:
-        return datetime.today().strftime('%-d')
+        return datetime.today().strftime('%d')
+
 
 def break_wrap():
     '''
@@ -71,6 +75,7 @@ def break_wrap():
     else:
         return "Wrap"
 
+
 def runtime():
     '''
     Prompts for user input. Checks input against a regular expression.
@@ -89,6 +94,7 @@ def runtime():
         else:
             continue
 
+
 def camera_rolls():
     '''
     Prompts for user input. 
@@ -103,9 +109,10 @@ def camera_rolls():
         cr = input("Please Enter The Camera Roll(s): ")
         mo = camRegEx.findall(cr)
         mo.sort()
-        sortedRoll = ', '.join(mo)
-        return sortedRoll.upper()
-         
+        sorted_roll = ', '.join(mo)
+        return sorted_roll.upper()
+
+
 def sound_rolls():
     '''
     Prompts for user input. 
@@ -114,7 +121,7 @@ def sound_rolls():
         Sound rolls as a string.
     '''
 
-    srRegEx = re.compile(r'(([a-z]{2})?\d\d\d)', re.IGNORECASE)
+    sr_reg_ex = re.compile(r'(([a-z]{2})?\d\d\d)', re.IGNORECASE)
 
     sr = ''
     roll_list = []
@@ -122,12 +129,12 @@ def sound_rolls():
     while sr == '':
         sr = str(input("Please Enter The Sound Roll(s): "))
 
-        if (sr == 'n/a' or sr == 'N/A'):
+        if sr == 'n/a' or sr == 'N/A':
             return sr
         elif sr == '':
             continue
         else:
-            mo = srRegEx.findall(sr)
+            mo = sr_reg_ex.findall(sr)
 
             if mo:
                 for roll in mo:
@@ -140,7 +147,7 @@ def sound_rolls():
                 continue
             
 
-def received_email():
+def received_email_text():
 
     distro_list = email_distro()
 
@@ -150,9 +157,9 @@ def received_email():
     cr = camera_rolls()
     sr = sound_rolls()
 
-    #Create TXT File
-    fullName = os.path.join(filePath,"break.txt")
-    f = open(fullName, 'w')
+    # Create TXT File
+    full_name = os.path.join(filePath, "break.txt")
+    f = open(full_name, 'w')
 
     f.write(distro_list)
     
@@ -168,4 +175,39 @@ def received_email():
 
     print("a txt file titled, \"break.txt\" has been created in the location of this program.")
 
-received_email()
+
+def received_email_html():
+
+    distro_list = email_distro()
+    am_pm_break = break_wrap()
+    day = day_check()
+    trt = runtime()
+    cr = camera_rolls()
+    sr = sound_rolls()
+
+    html_path = os.path.join(filePath, 'HTML\\break.html')
+    html_file = open(html_path, 'w')
+
+    message = f'''
+        <head>
+            <title>Break Email</title>
+        </head>
+        <html>
+            <body>
+                <p>{distro_list}</p><br>
+                <p>{show_code}_{date + day}_{episode}_{shooting_day} - {am_pm_break} Received</p><br>
+                <p><strong>\"{show_name}\"</strong> {episode} Day {shooting_day}, {month} {day}, {year} - 
+                <strong>{am_pm_break} Received</strong>.</p><br>
+                <p>\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).</p><br>
+                <p>\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.</p>
+            </body>
+        </html>
+        '''
+    html_file.write(message)
+    html_file.close()
+    webbrowser.open(html_path)
+
+
+# received_email_text()
+
+received_email_html()
