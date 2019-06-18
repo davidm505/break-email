@@ -1,5 +1,14 @@
 from datetime import datetime, timedelta
 import re
+import os
+import json
+
+# FilPath Variables
+cwd = os.getcwd()
+filePath = os.path.dirname(os.path.realpath(__file__))
+
+# JSON
+json_path = os.path.join(cwd,"JSON/CrewList.json")
 
 # Date Variables
 date = datetime.today().strftime('%Y%m')
@@ -74,6 +83,17 @@ class Organizer:
     def __str__(self):
         return self.media
 
+def email_distro():
+
+    email_distro_list = ''
+
+    with open(json_path,'r') as f:
+        distro_dict = json.load(f)
+
+    for member in distro_dict["Complete Email"]:
+        email_distro_list += (member['Email'] + ' ')
+    
+    return email_distro_list
 
 def day_check():
     '''
@@ -188,6 +208,8 @@ def discrepancy():
 
 def complete_email():
 
+    distr_list = email_distro()
+
     day = day_check()
     camera_rolls = camera_roll_organizer()
     sound_rolls = sound_roll_organizer()
@@ -197,8 +219,17 @@ def complete_email():
     discrepancies = discrepancy()
 
     f = open('Complete.txt', 'w')
-    f.write(
-        f'{show_code}_{date + day}_{episode}_{shooting_day} - Dailies Complete\n\n\"{show_name}\"\nShoot Date: {date + day}\nTransfer Date: {date + day}\n\nAll dailies work for \"{show_name}\" {episode} Day {shooting_day}, {month} {day}, {year} is now complete.\n\nDiscrepancy Highlights: {discrepancies}\n\nEditorial Files: All Editorial Dailies for {show_name} {episode} Day {shooting_day}, have been transferred over Aspera and can be found on The ISIS.\n\nPIX: All PIX Screeners for {show_name} {episode}, Day {shooting_day}, have been uploaded to the Dailies unreleased folder.\n\nThe Break & Wrap On Set Rotation Drives are available for pickup from the dailies office at any time.  Building A room 216.\n\nReports:  Please find all attached reports from production and the dailies lab. The following Rotation Drives and Camera Rolls have been received, backed up, and QC’d at the lab.\n\nDrives Received:\n{shuttles}\nCamera Rolls Completed:\n{camera_rolls}\n\nSound Rolls:\n{sound_rolls}\n\n{ep_list}Total GB: {gigabytes}')
+    f.write(distr_list + '\n\n')
+    f.write(f'{show_code}_{date + day}_{episode}_{shooting_day} - Dailies Complete')
+    f.write(f'\n\n\"{show_name}\"\nShoot Date: {date + day}\nTransfer Date: {date + day}')
+    f.write(f'\n\nAll dailies work for \"{show_name}\" {episode} Day {shooting_day}, {month} {day}, {year} is now complete.')
+    f.write(f'\n\nDiscrepancy Highlights: {discrepancies}')
+    f.write(f'\n\nEditorial Files: All Editorial Dailies for {show_name} {episode} Day {shooting_day}, have been transferred over Aspera and can be found on The NEXIS.')
+    f.write(f'\n\nPIX: All PIX Screeners for {show_name} {episode}, Day {shooting_day}, have been uploaded to the Dailies unreleased folder.')
+    f.write(f'\n\nThe Break & Wrap On Set Rotation Drives are available for pickup from the dailies office at any time.  Building A room 216.')
+    f.write(f'\n\nReports:  Please find all attached reports from production and the dailies lab. The following Rotation Drives and Camera Rolls have been received, backed up, and QC’d at the lab.')
+    f.write(f'\n\nDrives Received:\n{shuttles}\nCamera Rolls Completed:\n{camera_rolls}\n\nSound Rolls:\n{sound_rolls}')
+    f.write(f'\n\n{ep_list}Total GB: {gigabytes}')
     f.close()
 
     print('A text file titled, \"Complete.txt\" has been created in the location of this script.')
