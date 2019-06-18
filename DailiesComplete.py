@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import re
 import os
 import json
+import webbrowser
 
 # FilPath Variables
 cwd = os.getcwd()
@@ -71,7 +72,7 @@ class Organizer:
         """
 
         sound_regex = re.compile(r'''
-        [a-z]+  # Sound roll letters
+        [a-z]{2}?  # Sound roll letters
         \d{3}   # Sound Roll number
         ''', re.VERBOSE | re.IGNORECASE)
 
@@ -100,15 +101,15 @@ def day_check():
         Checks the current hour and adjusts the day if it past midnight and before noon
     '''
 
-    hour = datetime.today().strftime('%-H')
+    hour = datetime.today().strftime('%H')
 
     hour = int(hour)
 
     if hour in range(0, 12):
         yesterday = datetime.today() - timedelta(days=1)
-        return yesterday.strftime('%-d')
+        return yesterday.strftime('%d')
     else:
-        return datetime.today().strftime('%-d')
+        return datetime.today().strftime('%d')
 
 def episode_gatherer():
     episodes = []
@@ -218,6 +219,7 @@ def complete_email():
     ep_list = episode_organizer(ep)
     discrepancies = discrepancy()
 
+    # Create Txt File
     f = open('Complete.txt', 'w')
     f.write(distr_list + '\n\n')
     f.write(f'{show_code}_{date + day}_{episode}_{shooting_day} - Dailies Complete')
@@ -232,21 +234,80 @@ def complete_email():
     f.write(f'\n\n{ep_list}Total GB: {gigabytes}')
     f.close()
 
+    # Create HTML File
+    html_path = os.path.join(filePath, 'HTML\\complete.html')
+    html_file = open(html_path, 'w')
+
+    message = f'''
+    <html>
+        <body>
+            <p>
+                {distr_list}
+            </p>
+            <br>
+            <p>
+                {show_code}_{date + day}_{episode}_{shooting_day} - Dailies Complete
+            </p>
+            <br> 
+            <div>
+                <strong>\"{show_name}\"</strong>
+                <br>
+                Shoot Date: {date + day}
+                <br>
+                Transfer Date: {date + day}
+            </div>
+            <br> 
+            <p>
+                All dailies work for <strong>\"{show_name}\"</strong> {episode} Day {shooting_day}, {month} {day}, {year} is now complete.
+             </p>
+             <br> 
+            <p>
+                <strong>Discrepancy Highlights:</strong> {discrepancies}
+            </p>
+            <br> 
+            <p>
+                <strong>Editorial Files:</strong> All Editorial Dailies for <strong>\"{show_name}\"</strong> 
+                {episode} Day {shooting_day}, have been transferred over Aspera and can be found on The NEXIS.
+            </p>
+            <br> 
+            <p>
+                <strong>PIX:</strong> All PIX Screeners for <strong>\"{show_name}\"</strong> {episode}, 
+                Day {shooting_day}, have been uploaded to the Dailies unreleased folder.
+            </p>
+            <br> 
+            <p>
+                The <strong>Break & Wrap</strong> On Set Rotation Drives are available for pickup from 
+                the dailies office at any time. Building A room 216.
+            </p>
+            <br> 
+            <p>
+                <strong>Reports:</strong>  Please find all attached reports from production and the dailies lab. 
+                The following Rotation Drives and Camera Rolls have been received, backed up, 
+                and QC\'d at the lab.
+            </p>
+            <br> 
+            <div>
+                <strong>Drives Received:</strong>{shuttles}
+                <br>
+                <strong>Camera Rolls Completed:</strong>{camera_rolls}
+                <br>
+                <strong>Sound Rolls:</strong>\n{sound_rolls}
+            </div>
+            <br> 
+            <p>
+                {ep_list}
+                <br>
+                Total GB: {gigabytes}
+            </p>
+            <br>
+        </body>
+    </html>
+    '''
+    html_file.write(message)
+    html_file.close()
+    webbrowser.open(html_path)
+
     print('A text file titled, \"Complete.txt\" has been created in the location of this script.')
-
-    # print(f'{show_code}_{date+day}_{episode}_{shooting_day} - Dailies Complete\n')
-
-    # print(f"{show_name}\nShoot Date: {date+day}\nTransfer Date: {date+day}\n")
-    # print(f"All dailies work for {show_name} {episode} Day {shooting_day}, {month} {day}, {year} is now complete.\n")
-    # print(f'Discrepancy Highlights: {discrepancies}\n')
-    # print(f'Editorial Files: All Editorial Dailies for {show_name} {episode} Day {shooting_day}, have been transferred over Aspera and can be found on The ISIS.\n')
-    # print(f"PIX: All PIX Screeners for {show_name} {episode}, Day {shooting_day}, have been uploaded to the Dailies unreleased folder.\n")
-    # print('The Break & Wrap On Set Rotation Drives are available for pickup from the dailies office at any time.  Building A room 211.\n')
-    # print('Reports:  Please find all attached reports from production and the dailies lab. The following Rotation Drives and Camera Rolls have been received, backed up, and QC’d at the lab.\n')
-    # print(f'Drives Received:\n{shuttles}')
-    # print(f'Camera Rolls Completed:\n{camera_rolls}\n')
-    # print(f'Sound Rolls:\n{sound_rolls}\n')
-    # print(f'{ep_list}')
 
 
 complete_email()
