@@ -3,6 +3,7 @@ import re
 import os.path
 import json
 import webbrowser
+from bs4 import BeautifulSoup
 
 # FilPath Variables
 cwd = os.getcwd()
@@ -12,7 +13,7 @@ print("Current Working Directory is: " + cwd)
 print("File path is: " + filePath)
 
 # JSON
-json_path = os.path.join(cwd,"JSON/CrewList.json")
+json_path = os.path.join(filePath,"JSON/CrewList.json")
 
 # Date Variables
 date = datetime.today().strftime('%Y%m')
@@ -185,7 +186,7 @@ def received_email_html():
     cr = camera_rolls()
     sr = sound_rolls()
 
-    html_path = os.path.join(filePath, 'HTML\\break.html')
+    html_path = os.path.join(filePath, 'HTML/break.html')
     html_file = open(html_path, 'w')
 
     message = f'''
@@ -198,15 +199,15 @@ def received_email_html():
                 <p>{show_code}_{date + day}_{episode}_{shooting_day} - {am_pm_break} Received</p><br>
                 <p><strong>\"{show_name}\"</strong> {episode} Day {shooting_day}, {month} {day}, {year} - 
                 <strong>{am_pm_break} Received</strong>.</p><br>
-                <p>\n\nTotal Footage Received and Transferred: {trt} ({gigabytes} GBs).</p><br>
-                <p>\n\nCamera Rolls {cr} and Sound Roll {sr} have been received at the lab.</p>
+                <p>Total Footage Received and Transferred: {trt} ({gigabytes} GBs).</p><br>
+                <p>Camera Rolls {cr} and Sound Roll {sr} have been received at the lab.</p>
             </body>
         </html>
         '''
     html_file.write(message)
     html_file.close()
-    webbrowser.open(html_path)
 
+    webbrowser.open_new_tab('/Users/davidmorales/Documents/Repos/Python/DailiesEmail/break-email/HTML/break.html')
 
 # received_email_text()
 

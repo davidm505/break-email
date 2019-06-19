@@ -9,7 +9,7 @@ cwd = os.getcwd()
 filePath = os.path.dirname(os.path.realpath(__file__))
 
 # JSON
-json_path = os.path.join(cwd,"JSON/CrewList.json")
+json_path = os.path.join(filePath,"JSON/CrewList.json")
 
 # Date Variables
 date = datetime.today().strftime('%Y%m')
@@ -54,14 +54,22 @@ class Organizer:
             [string] -- [All camera rolls sorted inside of a string on their own line.]
         """
 
+        mag_list = []
+
         cam_reg_ex = re.compile(r'''
-        [a-z]   # Camera Letter
-        \d{3}  # Camera Numerical Roll
+        ([a-z]           # Camera Letter
+        \d{3}           # Camera Numerical Roll
+        (_\d\d\d\d)?)     # (optional) FrameRate
         ''', re.IGNORECASE | re.VERBOSE)
 
         mtch_obj = cam_reg_ex.findall(self.media)
-        mtch_obj.sort()
-        mtch_obj_string = '\n'.join(mtch_obj)
+
+        for mag in mtch_obj:
+            mag_list.append(mag[0])
+        
+        mag_list.sort()
+        mtch_obj_string = '<br>'.join(mag_list)
+        print(mtch_obj_string)
         return mtch_obj_string
 
     def sound_regex(self):
@@ -71,14 +79,19 @@ class Organizer:
             [string] -- [All sound rolls sorted in a string on their own line.]
         """
 
+        roll_list = []
         sound_regex = re.compile(r'''
-        [a-z]{2}?  # Sound roll letters
-        \d{3}   # Sound Roll number
+        (([a-z]{2})?   # Sound roll letters
+        \d{3})       # Sound Roll number
         ''', re.VERBOSE | re.IGNORECASE)
 
         mtch_obj = sound_regex.findall(self.media)
-        mtch_obj.sort()
-        mtch_obj_string = '\n'.join(mtch_obj)
+
+        for roll in mtch_obj:
+            roll_list.append(roll[0])
+
+        roll_list.sort()
+        mtch_obj_string = '<br>'.join(roll_list)
         return mtch_obj_string
 
     def __str__(self):
@@ -129,10 +142,10 @@ def episode_organizer(eps):
     organized_ep = ''
 
     for ep_block in eps:
-        organized_ep += ('Running Times:\n'
-                         + ep_block[0] + ' Day ' + shooting_day + '\n'
-                         + "Total Viewing TRT: " + ep_block[1] + '\n'
-                         + "Total Editorial TRT: " + ep_block[2] + '\n\n')
+        organized_ep += ('Running Times:<br>'
+                         + ep_block[0] + ' Day ' + shooting_day + '<br>'
+                         + "Total Viewing TRT: " + ep_block[1] + '<br>'
+                         + "Total Editorial TRT: " + ep_block[2] + '<br><br>')
 
     return organized_ep
 
@@ -154,7 +167,7 @@ def shuttle_organizer():
         appended_shuttle_list = ''
 
         for drive in new_shuttles:
-            appended_shuttle_list += "Shuttle Drive: " + drive + '\n'
+            appended_shuttle_list += "Shuttle Drive: " + drive + '<br>'
 
         return appended_shuttle_list
 
@@ -235,12 +248,14 @@ def complete_email():
     f.close()
 
     # Create HTML File
-    html_path = os.path.join(filePath, 'HTML\\complete.html')
+    html_path = os.path.join(filePath, 'HTML/complete.html')
     html_file = open(html_path, 'w')
 
     message = f'''
     <html>
+        <title>Dailies Complete</title>
         <body>
+            <h1>Dailies Complete</h1>
             <p>
                 {distr_list}
             </p>
@@ -287,15 +302,24 @@ def complete_email():
             </p>
             <br> 
             <div>
-                <strong>Drives Received:</strong>{shuttles}
+                <strong>Drives Received:</strong>
                 <br>
-                <strong>Camera Rolls Completed:</strong>{camera_rolls}
+                {shuttles}
                 <br>
-                <strong>Sound Rolls:</strong>\n{sound_rolls}
+                <br>
+                <strong>Camera Rolls Completed:</strong>
+                <br>
+                {camera_rolls}
+                <br>
+                <br>
+                <strong>Sound Rolls:</strong>
+                <br>
+                {sound_rolls}
             </div>
             <br> 
             <p>
                 {ep_list}
+                <br>
                 <br>
                 Total GB: {gigabytes}
             </p>
